@@ -57,9 +57,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-primary">
-      <div className="p-6 border-b border-white/10 flex flex-col items-center gap-2">
-        <img src={logoWhite} alt="AgriCapital" className="h-16 w-auto" />
-        <p className="text-xs text-primary-foreground/70 text-center">{profile?.nom_complet}</p>
+      <div className="p-6 border-b border-white/10 flex justify-center">
+        <img src={logoWhite} alt="AgriCapital" className="h-20 w-auto" />
       </div>
       
       <nav className="flex-1 p-4 space-y-1">
