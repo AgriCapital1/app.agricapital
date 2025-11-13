@@ -145,14 +145,14 @@ const UtilisateurFormNew = ({ utilisateur, onSuccess, onCancel }: UtilisateurFor
             email: data.email,
             password: data.password || '@AgriCapital2025',
             nom_complet: data.nom_complet,
-            telephone: data.telephone,
-            whatsapp: data.whatsapp,
-            departement: data.departement,
-            equipe_id: data.equipe_id,
-            relation_rh: data.relation_rh,
-            taux_commission: data.taux_commission,
-            region_id: data.region_id,
-            photo_url: photoUrl,
+            telephone: data.telephone || null,
+            whatsapp: data.whatsapp || null,
+            poste: null,
+            departement: data.departement || null,
+            equipe: data.equipe_id || null,
+            statut_employe: 'actif',
+            taux_commission: data.taux_commission || null,
+            date_embauche: new Date().toISOString().split('T')[0],
             roles: selectedRoles,
           }
         });
@@ -195,6 +195,17 @@ const UtilisateurFormNew = ({ utilisateur, onSuccess, onCancel }: UtilisateurFor
             <Label>Username *</Label>
             <Input {...register("username", { required: true })} disabled={!!utilisateur} />
           </div>
+
+          {!utilisateur && (
+            <div className="space-y-2">
+              <Label>Mot de passe *</Label>
+              <Input 
+                type="password" 
+                {...register("password", { required: !utilisateur })} 
+                placeholder="@AgriCapital2025"
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label>Email *</Label>

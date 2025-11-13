@@ -15,9 +15,9 @@ const CreateSuperAdmin = () => {
       const { data, error } = await supabase.functions.invoke('create-super-admin', {
         body: {
           username: 'admin',
-          email: 'admin@agricapital.ci',
-          password: '@Massa2020',
-          nom_complet: 'Inocent KOFFI'
+          email: 'contact@agricapital.ci',
+          password: '@AgriCapital',
+          nom_complet: 'KOFFI Inocent'
         }
       });
 
@@ -53,9 +53,9 @@ const CreateSuperAdmin = () => {
         <CardContent className="space-y-4">
           <div className="space-y-2 text-sm">
             <p><strong>Nom d'utilisateur:</strong> admin</p>
-            <p><strong>Email:</strong> admin@agricapital.ci</p>
-            <p><strong>Nom:</strong> Inocent KOFFI</p>
-            <p><strong>Téléphone:</strong> +2250759566087</p>
+            <p><strong>Email:</strong> contact@agricapital.ci</p>
+            <p><strong>Nom:</strong> KOFFI Inocent</p>
+            <p><strong>Téléphone:</strong> 0759566087</p>
             <p><strong>Rôle:</strong> Super Administrateur</p>
           </div>
           
