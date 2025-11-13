@@ -46,7 +46,7 @@ const Promotions = () => {
   const { data: promotions, isLoading } = useQuery({
     queryKey: ['promotions'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('promotions')
         .select('*')
         .order('created_at', { ascending: false });
@@ -70,13 +70,13 @@ const Promotions = () => {
       };
 
       if (editingPromo) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('promotions')
           .update(promoData)
           .eq('id', editingPromo.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('promotions')
           .insert([promoData]);
         if (error) throw error;
@@ -103,7 +103,7 @@ const Promotions = () => {
   // Toggle status
   const toggleStatusMutation = useMutation({
     mutationFn: async ({ id, newStatus }: { id: string; newStatus: string }) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('promotions')
         .update({ statut: newStatus })
         .eq('id', id);
@@ -121,7 +121,7 @@ const Promotions = () => {
   // Delete promotion
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('promotions')
         .delete()
         .eq('id', id);

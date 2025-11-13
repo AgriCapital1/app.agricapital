@@ -15,7 +15,7 @@ export const usePromotionActive = () => {
   return useQuery({
     queryKey: ['promotion-active'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .rpc('get_promotion_active');
       
       if (error) throw error;

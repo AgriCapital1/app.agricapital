@@ -27,7 +27,7 @@ const Utilisateurs = () => {
   const fetchUtilisateurs = async () => {
     try {
       // Fetch profiles
-      const { data: profiles, error: profilesError } = await supabase
+      const { data: profiles, error: profilesError } = await (supabase as any)
         .from("profiles")
         .select("*")
         .order("created_at", { ascending: false });
@@ -35,16 +35,16 @@ const Utilisateurs = () => {
       if (profilesError) throw profilesError;
 
       // Fetch roles separately
-      const { data: roles, error: rolesError } = await supabase
+      const { data: roles, error: rolesError } = await (supabase as any)
         .from("user_roles")
         .select("*");
 
       if (rolesError) throw rolesError;
 
       // Merge profiles with their roles
-      const profilesWithRoles = profiles?.map(profile => ({
+      const profilesWithRoles = profiles?.map((profile: any) => ({
         ...profile,
-        user_roles: roles?.filter(role => role.user_id === profile.id) || []
+        user_roles: roles?.filter((role: any) => role.user_id === profile.id) || []
       })) || [];
 
       setUtilisateurs(profilesWithRoles);
