@@ -147,12 +147,12 @@ const UtilisateurFormNew = ({ utilisateur, onSuccess, onCancel }: UtilisateurFor
             nom_complet: data.nom_complet,
             telephone: data.telephone || null,
             whatsapp: data.whatsapp || null,
-            poste: null,
             departement: data.departement || null,
-            equipe: data.equipe_id || null,
-            statut_employe: 'actif',
+            equipe_id: data.equipe_id || null,
+            relation_rh: data.relation_rh || 'Employé',
             taux_commission: data.taux_commission || null,
-            date_embauche: new Date().toISOString().split('T')[0],
+            region_id: data.region_id || null,
+            photo_url: photoUrl,
             roles: selectedRoles,
           }
         });

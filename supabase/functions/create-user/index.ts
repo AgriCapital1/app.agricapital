@@ -30,12 +30,12 @@ serve(async (req) => {
       nom_complet,
       telephone,
       whatsapp,
-      poste,
       departement,
-      equipe,
-      statut_employe,
+      equipe_id,
+      relation_rh,
       taux_commission,
-      date_embauche,
+      region_id,
+      photo_url,
       roles 
     } = await req.json();
 
@@ -96,12 +96,14 @@ serve(async (req) => {
         username,
         email,
         nom_complet,
-        telephone: telephone || null,
-        whatsapp: whatsapp || null,
-        departement: departement || null,
-        equipe_id: equipe || null,
-        relation_rh: statut_employe || "Employé",
-        taux_commission: taux_commission || null,
+        telephone,
+        whatsapp,
+        departement,
+        equipe_id,
+        relation_rh: relation_rh || "Employé",
+        taux_commission,
+        region_id,
+        photo_url,
         est_actif: true,
       });
 
