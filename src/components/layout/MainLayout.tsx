@@ -12,15 +12,11 @@ import {
   CreditCard, 
   LogOut, 
   Menu,
-  FileText,
-  AlertCircle,
   Shield,
-  DollarSign,
-  Wallet,
   UsersRound,
   Receipt,
-  Tag,
-  Plus
+  Plus,
+  Smartphone
 } from "lucide-react";
 
 interface MainLayoutProps {
@@ -45,6 +41,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     { icon: Users, label: "Planteurs", path: "/souscriptions" },
     { icon: Sprout, label: "Plantations", path: "/plantations" },
     { icon: CreditCard, label: "Paiements", path: "/paiements", requireRole: canViewPaiements },
+    { icon: Smartphone, label: "Paiements Wave", path: "/paiements-wave", requireRole: canViewPaiements },
     { icon: UsersRound, label: "Équipes", path: "/equipes" },
     { icon: Receipt, label: "Commissions", path: "/commissions", requireRole: canViewCommissions },
     { icon: Shield, label: "Paramètres", path: "/parametres", adminOnly: true },
@@ -57,8 +54,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-primary">
-      <div className="p-6 border-b border-white/10 flex justify-center">
-        <img src={logoWhite} alt="AgriCapital" className="h-20 w-auto" />
+      <div className="p-4 border-b border-white/10 flex justify-center">
+        <img src={logoWhite} alt="AgriCapital" className="h-16 w-auto object-contain" />
       </div>
       
       <nav className="flex-1 p-4 space-y-1">
@@ -73,28 +70,28 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               key={item.path}
               variant="ghost"
               className={cn(
-                "w-full justify-start text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground transition-all",
-                "focus:bg-primary-foreground/20"
+                "w-full justify-center text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground transition-all",
+                "focus:bg-primary-foreground/20 p-3"
               )}
               onClick={() => {
                 navigate(item.path);
                 setOpen(false);
               }}
+              title={item.label}
             >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.label}
+              <item.icon className="h-5 w-5" />
             </Button>
           ))}
       </nav>
 
-      <div className="p-4 border-t border-white/10 space-y-2">
+      <div className="p-4 border-t border-white/10">
         <Button
           variant="ghost"
-          className="w-full justify-start text-primary-foreground hover:bg-destructive hover:text-white transition-all"
+          className="w-full justify-center text-primary-foreground hover:bg-destructive hover:text-white transition-all p-3"
           onClick={handleLogout}
+          title="Déconnexion"
         >
-          <LogOut className="mr-3 h-5 w-5" />
-          Déconnexion
+          <LogOut className="h-5 w-5" />
         </Button>
       </div>
     </div>
@@ -103,7 +100,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <div className="flex h-screen bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 flex-col">
+      <aside className="hidden md:flex w-20 flex-col">
         <SidebarContent />
       </aside>
 

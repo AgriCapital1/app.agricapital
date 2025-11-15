@@ -21,6 +21,7 @@ import Promotions from "./pages/Promotions";
 import NouvelleSouscription from "./pages/NouvelleSouscription";
 import Parametres from "./pages/Parametres";
 import HistoriqueComplet from "./pages/HistoriqueComplet";
+import PaiementsWave from "./pages/PaiementsWave";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/promotions" element={<Promotions />} />
             <Route path="/parametres" element={<Parametres />} />
             <Route path="/nouvelle-souscription" element={<NouvelleSouscription />} />
+            <Route path="/paiements-wave" element={<PaiementsWave />} />
             <Route path="/create-super-admin" element={<CreateSuperAdmin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
