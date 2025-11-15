@@ -34,15 +34,10 @@ const ChampsPersonnalises = () => {
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="nom_champ">Nom du champ</Label>
-                  <Input
-                    id="nom_champ"
-                    placeholder="Ex: Numéro CNI Témoin"
-                  />
+                  <Input id="nom_champ" placeholder="Ex: Numéro CNI Témoin" />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="type_champ">Type de champ</Label>
                   <Select>
@@ -58,18 +53,10 @@ const ChampsPersonnalises = () => {
                     </SelectContent>
                   </Select>
                 </div>
-
                 <Button className="w-full">
                   <Plus className="h-4 w-4 mr-2" />
                   Ajouter le champ
                 </Button>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Champs personnalisés existants</h3>
-              <div className="text-sm text-muted-foreground">
-                Aucun champ personnalisé pour le moment
               </div>
             </div>
           </div>
