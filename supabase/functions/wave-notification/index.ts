@@ -13,6 +13,38 @@ serve(async (req) => {
   }
 
   try {
+    // Webhook Signature Verification (add WAVE_WEBHOOK_SECRET in Lovable Cloud settings)
+    const signature = req.headers.get('X-Wave-Signature');
+    const webhookSecret = Deno.env.get('WAVE_WEBHOOK_SECRET');
+    
+    if (webhookSecret && signature) {
+      const body = await req.text();
+      const encoder = new TextEncoder();
+      const data = encoder.encode(body + webhookSecret);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const expectedSignature = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      
+      if (signature !== expectedSignature) {
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: 'Invalid webhook signature' 
+          }),
+          { 
+            status: 401, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
+      }
+      
+      // Re-parse body after verification
+      var { transaction_id, telephone, montant, date_paiement, type_paiement, donnees_supplementaires } = JSON.parse(body);
+    } else {
+      // No signature verification configured - parse normally
+      var { transaction_id, telephone, montant, date_paiement, type_paiement, donnees_supplementaires } = await req.json();
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -24,29 +56,71 @@ serve(async (req) => {
       }
     );
 
-    // Récupérer les données de paiement Wave
-    const {
-      transaction_id,
-      telephone,
-      montant,
-      date_paiement,
-      type_paiement,
-      donnees_supplementaires
-    } = await req.json();
+    console.log('Notification Wave reçue');
 
-    console.log('Notification Wave reçue:', {
-      transaction_id,
-      telephone,
-      montant,
-      type_paiement
-    });
-
-    // Validation des données requises
+    // Input Validation
     if (!transaction_id || !telephone || !montant) {
       return new Response(
         JSON.stringify({ 
           success: false, 
           error: 'Données de paiement incomplètes' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Validate transaction ID format
+    if (!/^[A-Za-z0-9_-]{8,64}$/.test(transaction_id)) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Format de transaction ID invalide' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Validate phone number format (10 digits)
+    if (!/^\d{10}$/.test(telephone)) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Format de téléphone invalide. Doit être 10 chiffres.' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Validate amount (positive, reasonable range)
+    if (typeof montant !== 'number' || montant <= 0 || montant > 50000000) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Montant invalide. Doit être entre 1 et 50,000,000 FCFA.' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Validate type_paiement
+    const validTypes = ['droit_acces', 'contribution_annuelle'];
+    if (type_paiement && !validTypes.includes(type_paiement)) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Type de paiement invalide' 
         }),
         { 
           status: 400, 

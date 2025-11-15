@@ -7,6 +7,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Eye, X } from "lucide-react";
 
+// Validation helpers
+const validatePhone = (phone: string) => /^\d{10}$/.test(phone);
+const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const validateText = (text: string, minLength: number, maxLength: number) => 
+  text && text.length >= minLength && text.length <= maxLength;
+
 interface Etape1Props {
   formData: any;
   updateFormData: (data: any) => void;
@@ -21,6 +27,44 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
   const [photoRectoPreview, setPhotoRectoPreview] = useState<string>("");
   const [photoVersoPreview, setPhotoVersoPreview] = useState<string>("");
   const [photoProfilPreview, setPhotoProfilPreview] = useState<string>("");
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  const validateField = (field: string, value: any) => {
+    const errors = { ...validationErrors };
+    
+    switch(field) {
+      case 'telephone':
+      case 'whatsapp':
+        if (value && !validatePhone(value)) {
+          errors[field] = "Doit contenir exactement 10 chiffres";
+        } else {
+          delete errors[field];
+        }
+        break;
+      case 'email':
+        if (value && !validateEmail(value)) {
+          errors[field] = "Email invalide";
+        } else {
+          delete errors[field];
+        }
+        break;
+      case 'nom_complet':
+      case 'prenoms':
+        if (!validateText(value, 2, 100)) {
+          errors[field] = "Doit contenir entre 2 et 100 caractères";
+        } else {
+          delete errors[field];
+        }
+        break;
+    }
+    
+    setValidationErrors(errors);
+  };
+
+  const handleInputChange = (field: string, value: any) => {
+    updateFormData({ [field]: value });
+    validateField(field, value);
+  };
 
   // Charger les districts
   useEffect(() => {
@@ -158,10 +202,11 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
               <Input
                 id="prenoms"
                 value={formData.prenoms}
-                onChange={(e) => updateFormData({ prenoms: e.target.value })}
+                onChange={(e) => handleInputChange('prenoms', e.target.value)}
                 placeholder="Inocent"
                 required
               />
+              {validationErrors.prenoms && <p className="text-sm text-destructive mt-1">{validationErrors.prenoms}</p>}
             </div>
           </div>
 
@@ -469,10 +514,11 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
                 id="telephone"
                 type="tel"
                 value={formData.telephone}
-                onChange={(e) => updateFormData({ telephone: e.target.value })}
-                placeholder="+225 07 XX XX XX XX"
+                onChange={(e) => handleInputChange('telephone', e.target.value)}
+                placeholder="0XXXXXXXXX"
                 required
               />
+              {validationErrors.telephone && <p className="text-sm text-destructive mt-1">{validationErrors.telephone}</p>}
             </div>
 
             <div className="space-y-2">
@@ -481,10 +527,11 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
                 id="whatsapp"
                 type="tel"
                 value={formData.whatsapp}
-                onChange={(e) => updateFormData({ whatsapp: e.target.value })}
-                placeholder="+225 07 XX XX XX XX"
+                onChange={(e) => handleInputChange('whatsapp', e.target.value)}
+                placeholder="0XXXXXXXXX"
                 required
               />
+              {validationErrors.whatsapp && <p className="text-sm text-destructive mt-1">{validationErrors.whatsapp}</p>}
             </div>
           </div>
 
@@ -494,9 +541,10 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => updateFormData({ email: e.target.value })}
+              onChange={(e) => handleInputChange('email', e.target.value)}
               placeholder="exemple@email.com"
             />
+            {validationErrors.email && <p className="text-sm text-destructive mt-1">{validationErrors.email}</p>}
           </div>
         </CardContent>
       </Card>

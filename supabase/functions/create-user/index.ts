@@ -39,7 +39,58 @@ serve(async (req) => {
       roles 
     } = await req.json();
 
-    console.log("Creating user:", { username, email, nom_complet });
+    // Input validation
+    if (!username || !/^[a-zA-Z0-9_]{3,50}$/.test(username)) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: "Nom d'utilisateur invalide. Doit contenir 3-50 caractères alphanumériques." 
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 255) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: "Email invalide" 
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+
+    if (!password || password.length < 8 || password.length > 128) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: "Mot de passe invalide. Doit contenir entre 8 et 128 caractères." 
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+
+    if (!nom_complet || nom_complet.length < 2 || nom_complet.length > 100) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: "Nom complet invalide. Doit contenir entre 2 et 100 caractères." 
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+
+    if (telephone && !/^\d{10}$/.test(telephone)) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: "Format de téléphone invalide. Doit être 10 chiffres." 
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+
+    console.log("Creating user with validated data");
 
     // Check if user already exists
     const { data: existingProfile } = await supabase
