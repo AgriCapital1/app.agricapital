@@ -13,6 +13,23 @@ serve(async (req) => {
   }
 
   try {
+    // API Key Authentication (add WAVE_API_KEY secret in Lovable Cloud settings)
+    const apiKey = req.headers.get('X-API-Key');
+    const expectedApiKey = Deno.env.get('WAVE_API_KEY');
+    
+    if (expectedApiKey && apiKey !== expectedApiKey) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Unauthorized - Invalid API key' 
+        }),
+        { 
+          status: 401, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -28,6 +45,7 @@ serve(async (req) => {
     const url = new URL(req.url);
     const telephone = url.searchParams.get('telephone');
 
+    // Input validation
     if (!telephone) {
       return new Response(
         JSON.stringify({ 
@@ -41,7 +59,21 @@ serve(async (req) => {
       );
     }
 
-    console.log('Vérification Wave pour:', telephone);
+    // Validate phone number format (10 digits)
+    if (!/^\d{10}$/.test(telephone)) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Format de téléphone invalide. Doit être 10 chiffres.' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    console.log('Vérification Wave initiée');
 
     // Rechercher le souscripteur par téléphone
     const { data: souscripteur, error: sousError } = await supabase

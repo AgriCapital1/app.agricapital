@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -9,6 +11,31 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { X } from "lucide-react";
+
+const userFormSchema = z.object({
+  username: z.string()
+    .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
+    .max(50, "Le nom d'utilisateur ne peut pas dépasser 50 caractères")
+    .regex(/^[a-zA-Z0-9_]+$/, "Le nom d'utilisateur ne peut contenir que des lettres, chiffres et underscore"),
+  email: z.string()
+    .email("Email invalide")
+    .max(255, "L'email ne peut pas dépasser 255 caractères"),
+  password: z.string()
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .max(128, "Le mot de passe ne peut pas dépasser 128 caractères")
+    .optional(),
+  nom_complet: z.string()
+    .min(2, "Le nom complet doit contenir au moins 2 caractères")
+    .max(100, "Le nom complet ne peut pas dépasser 100 caractères"),
+  telephone: z.string()
+    .regex(/^\d{10}$/, "Le téléphone doit contenir exactement 10 chiffres")
+    .optional()
+    .or(z.literal("")),
+  whatsapp: z.string()
+    .regex(/^\d{10}$/, "Le WhatsApp doit contenir exactement 10 chiffres")
+    .optional()
+    .or(z.literal("")),
+});
 
 interface UtilisateurFormProps {
   utilisateur?: any;
@@ -24,7 +51,8 @@ const ROLES = [
 ];
 
 const UtilisateurFormNew = ({ utilisateur, onSuccess, onCancel }: UtilisateurFormProps) => {
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+    resolver: zodResolver(userFormSchema),
     defaultValues: utilisateur || {},
   });
   const { toast } = useToast();
@@ -189,11 +217,13 @@ const UtilisateurFormNew = ({ utilisateur, onSuccess, onCancel }: UtilisateurFor
           <div className="space-y-2">
             <Label>Nom Complet *</Label>
             <Input {...register("nom_complet", { required: true })} />
+            {errors.nom_complet?.message && <p className="text-sm text-destructive">{String(errors.nom_complet.message)}</p>}
           </div>
 
           <div className="space-y-2">
             <Label>Username *</Label>
             <Input {...register("username", { required: true })} disabled={!!utilisateur} />
+            {errors.username?.message && <p className="text-sm text-destructive">{String(errors.username.message)}</p>}
           </div>
 
           {!utilisateur && (
@@ -204,22 +234,26 @@ const UtilisateurFormNew = ({ utilisateur, onSuccess, onCancel }: UtilisateurFor
                 {...register("password", { required: !utilisateur })} 
                 placeholder="@AgriCapital2025"
               />
+              {errors.password?.message && <p className="text-sm text-destructive">{String(errors.password.message)}</p>}
             </div>
           )}
 
           <div className="space-y-2">
             <Label>Email *</Label>
             <Input type="email" {...register("email", { required: true })} />
+            {errors.email?.message && <p className="text-sm text-destructive">{String(errors.email.message)}</p>}
           </div>
 
           <div className="space-y-2">
             <Label>Téléphone</Label>
-            <Input {...register("telephone")} />
+            <Input {...register("telephone")} placeholder="0XXXXXXXXX" />
+            {errors.telephone?.message && <p className="text-sm text-destructive">{String(errors.telephone.message)}</p>}
           </div>
 
           <div className="space-y-2">
             <Label>WhatsApp</Label>
-            <Input {...register("whatsapp")} />
+            <Input {...register("whatsapp")} placeholder="0XXXXXXXXX" />
+            {errors.whatsapp?.message && <p className="text-sm text-destructive">{String(errors.whatsapp.message)}</p>}
           </div>
 
           <div className="space-y-2 col-span-2">
