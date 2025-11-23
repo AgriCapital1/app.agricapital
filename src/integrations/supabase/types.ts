@@ -55,6 +55,68 @@ export type Database = {
           },
         ]
       }
+      champs_personnalises: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          est_actif: boolean | null
+          formulaire_cible: string
+          id: string
+          libelle: string
+          message_aide: string | null
+          nom_champ: string
+          obligatoire: boolean | null
+          options_liste: string[] | null
+          ordre: number | null
+          type_champ: string
+          updated_at: string | null
+          valeur_defaut: string | null
+          validation_regex: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          est_actif?: boolean | null
+          formulaire_cible: string
+          id?: string
+          libelle: string
+          message_aide?: string | null
+          nom_champ: string
+          obligatoire?: boolean | null
+          options_liste?: string[] | null
+          ordre?: number | null
+          type_champ: string
+          updated_at?: string | null
+          valeur_defaut?: string | null
+          validation_regex?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          est_actif?: boolean | null
+          formulaire_cible?: string
+          id?: string
+          libelle?: string
+          message_aide?: string | null
+          nom_champ?: string
+          obligatoire?: boolean | null
+          options_liste?: string[] | null
+          ordre?: number | null
+          type_champ?: string
+          updated_at?: string | null
+          valeur_defaut?: string | null
+          validation_regex?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "champs_personnalises_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commissions: {
         Row: {
           created_at: string | null
@@ -139,6 +201,101 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      configuration_systeme: {
+        Row: {
+          categorie: string
+          cle: string
+          created_at: string | null
+          description: string | null
+          id: string
+          modifiable: boolean | null
+          type_donnee: string
+          updated_at: string | null
+          updated_by: string | null
+          valeur: string
+        }
+        Insert: {
+          categorie: string
+          cle: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          modifiable?: boolean | null
+          type_donnee?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          valeur: string
+        }
+        Update: {
+          categorie?: string
+          cle?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          modifiable?: boolean | null
+          type_donnee?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          valeur?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "configuration_systeme_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      definitions_statuts: {
+        Row: {
+          categorie: string
+          code: string
+          couleur: string
+          created_at: string | null
+          description: string | null
+          est_actif: boolean | null
+          est_final: boolean | null
+          icone: string | null
+          id: string
+          libelle: string
+          ordre: number | null
+          permet_modification: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          categorie: string
+          code: string
+          couleur?: string
+          created_at?: string | null
+          description?: string | null
+          est_actif?: boolean | null
+          est_final?: boolean | null
+          icone?: string | null
+          id?: string
+          libelle: string
+          ordre?: number | null
+          permet_modification?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          categorie?: string
+          code?: string
+          couleur?: string
+          created_at?: string | null
+          description?: string | null
+          est_actif?: boolean | null
+          est_final?: boolean | null
+          icone?: string | null
+          id?: string
+          libelle?: string
+          ordre?: number | null
+          permet_modification?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       departements: {
         Row: {
@@ -1522,6 +1679,69 @@ export type Database = {
         }
         Relationships: []
       }
+      templates_notifications: {
+        Row: {
+          code: string
+          contenu: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          est_actif: boolean | null
+          id: string
+          nom: string
+          sujet: string | null
+          type_notification: string
+          updated_at: string | null
+          updated_by: string | null
+          variables_disponibles: string[] | null
+        }
+        Insert: {
+          code: string
+          contenu: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          est_actif?: boolean | null
+          id?: string
+          nom: string
+          sujet?: string | null
+          type_notification: string
+          updated_at?: string | null
+          updated_by?: string | null
+          variables_disponibles?: string[] | null
+        }
+        Update: {
+          code?: string
+          contenu?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          est_actif?: boolean | null
+          id?: string
+          nom?: string
+          sujet?: string | null
+          type_notification?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          variables_disponibles?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "templates_notifications_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "templates_notifications_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tickets_techniques: {
         Row: {
           assigne_a: string | null
@@ -1596,6 +1816,44 @@ export type Database = {
         }
         Relationships: []
       }
+      valeurs_champs_personnalises: {
+        Row: {
+          champ_id: string | null
+          created_at: string | null
+          entite_id: string
+          entite_type: string
+          id: string
+          updated_at: string | null
+          valeur: string | null
+        }
+        Insert: {
+          champ_id?: string | null
+          created_at?: string | null
+          entite_id: string
+          entite_type: string
+          id?: string
+          updated_at?: string | null
+          valeur?: string | null
+        }
+        Update: {
+          champ_id?: string | null
+          created_at?: string | null
+          entite_id?: string
+          entite_type?: string
+          id?: string
+          updated_at?: string | null
+          valeur?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "valeurs_champs_personnalises_champ_id_fkey"
+            columns: ["champ_id"]
+            isOneToOne: false
+            referencedRelation: "champs_personnalises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1615,6 +1873,7 @@ export type Database = {
       est_region_active: { Args: { region_nom: string }; Returns: boolean }
       generate_plantation_id: { Args: { region_code: string }; Returns: string }
       generate_souscripteur_id: { Args: never; Returns: string }
+      get_config: { Args: { p_cle: string }; Returns: string }
       get_montant_da_wave: {
         Args: { superficie_ha: number }
         Returns: {
