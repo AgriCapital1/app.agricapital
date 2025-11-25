@@ -17,7 +17,8 @@ const CreateSuperAdmin = () => {
           username: 'admin',
           email: 'contact@agricapital.ci',
           password: '@AgriCapital',
-          nom_complet: 'KOFFI Inocent'
+          nom_complet: 'KOFFI Inocent',
+          telephone: '0759566087'
         }
       });
 

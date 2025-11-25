@@ -23,7 +23,7 @@ serve(async (req) => {
       }
     );
 
-    const { username, email, password, nom_complet } = await req.json();
+    const { username, email, password, nom_complet, telephone } = await req.json();
 
     console.log('Creating super admin (idempotent):', { username, email, nom_complet });
 
@@ -98,6 +98,7 @@ serve(async (req) => {
         username,
         nom_complet,
         email,
+        telephone: telephone || null,
         est_actif: true,
       }, { onConflict: 'id' });
 
