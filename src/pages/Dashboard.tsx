@@ -229,10 +229,12 @@ const Dashboard = () => {
           {/* Header */}
           <div className="bg-gradient-to-r from-primary to-primary/80 p-6 rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold text-primary-foreground">
-              Bienvenue, {profile?.nom_complet || "Utilisateur"}
+              Bienvenue, <span className="text-accent font-extrabold">{profile?.nom_complet || "Utilisateur"}</span>
             </h1>
-            <p className="text-primary-foreground/90 mt-2">
-              Connecté à {connectionTime} - Tableau de bord en temps réel
+            <p className="text-primary-foreground/90 mt-2 flex items-center gap-4">
+              <span>Connecté à {connectionTime}</span>
+              <span className="text-primary-foreground/70">•</span>
+              <span>Support: <a href="tel:+2250759566087" className="text-accent hover:underline font-semibold">+225 07 59 56 60 87</a></span>
             </p>
           </div>
 
