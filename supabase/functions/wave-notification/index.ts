@@ -56,7 +56,7 @@ serve(async (req) => {
       }
     );
 
-    console.log('Notification Wave reçue');
+    console.log('Wave notification received');
 
     // Input Validation
     if (!transaction_id || !telephone || !montant) {
@@ -137,7 +137,7 @@ serve(async (req) => {
       .maybeSingle();
 
     if (existingTrans) {
-      console.log('Transaction déjà enregistrée:', transaction_id);
+      console.log('Duplicate transaction detected');
       return new Response(
         JSON.stringify({ 
           success: false, 
@@ -166,7 +166,7 @@ serve(async (req) => {
       .maybeSingle();
 
     if (sousError || !souscripteur) {
-      console.error('Souscripteur non trouvé:', telephone);
+      console.error('Subscriber not found');
       return new Response(
         JSON.stringify({ 
           success: false, 
@@ -179,7 +179,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('Souscripteur trouvé:', souscripteur.id);
+    console.log('Subscriber identified, processing payment');
 
     // Enregistrer le paiement Wave
     const { data: paiementWave, error: waveError } = await supabase
@@ -202,7 +202,7 @@ serve(async (req) => {
       throw waveError;
     }
 
-    console.log('Paiement Wave enregistré:', paiementWave.id);
+    console.log('Wave payment recorded successfully');
 
     // Mettre à jour le CRM selon le type de paiement
     if (type_paiement === 'droit_acces') {
@@ -245,7 +245,7 @@ serve(async (req) => {
         }
       }
 
-      console.log('DA mis à jour:', nouveauDA);
+      console.log('Access right payment processed');
 
     } else if (type_paiement === 'contribution_annuelle') {
       // Contribution Annuelle
@@ -289,7 +289,7 @@ serve(async (req) => {
         console.error('Erreur mise à jour contributions:', updateContribError);
       }
 
-      console.log('Contribution enregistrée:', montant, 'Mois:', nombreMois);
+      console.log('Annual contribution processed');
     }
 
     // Réponse de succès

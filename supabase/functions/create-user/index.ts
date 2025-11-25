@@ -90,7 +90,7 @@ serve(async (req) => {
       );
     }
 
-    console.log("Creating user with validated data");
+    console.log("User creation initiated");
 
     // Check if user already exists
     const { data: existingProfile } = await supabase
@@ -137,7 +137,7 @@ serve(async (req) => {
       throw authError;
     }
 
-    console.log("User created in auth:", authData.user.id);
+    console.log("User authentication record created");
 
     // Create profile
     const { error: profileError } = await supabase
@@ -183,7 +183,7 @@ serve(async (req) => {
         throw rolesError;
       }
 
-      console.log("Roles created:", roles);
+      console.log("User roles assigned successfully");
     }
 
     return new Response(
