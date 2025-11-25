@@ -87,12 +87,8 @@ const Index = () => {
       {/* Header */}
       <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center">
             <img src={logoGreen} alt="AgriCapital" className="h-20 w-auto" />
-            <div>
-              <h1 className="text-2xl font-bold text-primary">AgriCapital</h1>
-              <p className="text-xs text-muted-foreground">Gestion des Plantations</p>
-            </div>
           </div>
           <Button onClick={() => navigate("/login")} size="lg" className="gap-2">
             <Users className="h-4 w-4" />
