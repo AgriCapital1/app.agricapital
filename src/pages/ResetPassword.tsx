@@ -4,37 +4,72 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import logoGreen from "@/assets/logo-green.png";
 import { Eye, EyeOff } from "lucide-react";
 
-const Login = () => {
-  const [username, setUsername] = useState("");
+const ResetPassword = () => {
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn } = useAuth();
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Les mots de passe ne correspondent pas",
+      });
+      return;
+    }
+
+    if (password.length < 8) {
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Le mot de passe doit contenir au moins 8 caractères",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
-    const { error } = await signIn(username, password);
-    
-    if (!error) {
-      navigate('/dashboard');
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: password,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Succès",
+        description: "Votre mot de passe a été réinitialisé avec succès.",
+      });
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: error.message || "Impossible de réinitialiser le mot de passe",
+      });
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary to-primary-hover p-4 relative">
-      {/* Pattern de fond subtil */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnptMCA0YzEuMTA1IDAgMiAuODk1IDIgMnMtLjg5NSAyLTIgMi0yLS44OTUtMi0yIC44OTUtMiAyLTJ6IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] opacity-20"></div>
-      
-      {/* Overlay pour adoucir le fond */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
       
       <Card className="w-full max-w-md shadow-strong relative z-10 backdrop-blur-sm bg-white/95">
@@ -43,41 +78,19 @@ const Login = () => {
             <img src={logoGreen} alt="AgriCapital Logo" className="h-32 w-auto" />
           </div>
           <CardTitle className="text-2xl font-bold text-primary">
-            Connexion
+            Nouveau mot de passe
           </CardTitle>
+          <CardDescription>
+            Choisissez un nouveau mot de passe sécurisé
+          </CardDescription>
         </CardHeader>
         
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleResetPassword} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-foreground font-medium">
-                Nom d'utilisateur
+              <Label htmlFor="password" className="text-foreground font-medium">
+                Nouveau mot de passe
               </Label>
-              <Input
-                id="username"
-                type="text"
-                placeholder="Admin"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="h-11"
-                disabled={isLoading}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-foreground font-medium">
-                  Mot de passe
-                </Label>
-                <button
-                  type="button"
-                  onClick={() => window.location.href = '/forgot-password'}
-                  className="text-sm text-accent hover:underline font-medium"
-                >
-                  Mot de passe oublié ?
-                </button>
-              </div>
               <div className="relative">
                 <Input
                   id="password"
@@ -105,25 +118,49 @@ const Login = () => {
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-foreground font-medium">
+                Confirmer le mot de passe
+              </Label>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="h-11 pr-10"
+                  disabled={isLoading}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-0 top-0 h-11 w-11 hover:bg-transparent"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </Button>
+              </div>
+            </div>
+
             <Button 
               type="submit" 
               className="w-full h-11 text-base font-semibold bg-primary hover:bg-primary-hover text-primary-foreground transition-all"
               disabled={isLoading}
             >
-              {isLoading ? "Connexion..." : "Se connecter"}
+              {isLoading ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
             </Button>
           </form>
-
-          <div className="mt-6 text-center text-sm">
-            <p className="text-muted-foreground">Système de Gestion des Planteurs & Plantations</p>
-            <p className="mt-2 font-semibold text-primary">
-              "Ensemble, cultivons la prospérité durable"
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default Login;
+export default ResetPassword;
