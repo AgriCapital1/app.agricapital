@@ -73,7 +73,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('Vérification Wave initiée');
+    console.log('Wave verification initiated');
 
     // Rechercher le souscripteur par téléphone
     const { data: souscripteur, error: sousError } = await supabase
@@ -117,7 +117,7 @@ serve(async (req) => {
       0
     ) || 0;
 
-    console.log('Souscripteur trouvé:', souscripteur.id, 'Superficie:', superficieTotale);
+    console.log('Subscriber found, processing payment calculation');
 
     // Déterminer le type de paiement
     const daTotal = souscripteur.total_da_verse || 0;
@@ -165,7 +165,7 @@ serve(async (req) => {
         0
       ) || 0;
 
-      console.log('Total contributions:', totalContributions);
+      console.log('Contributions calculated');
 
       // Calculer statut avec la fonction
       const { data: statut, error: statError } = await supabase
@@ -179,7 +179,7 @@ serve(async (req) => {
         statutContribution = s.statut;
         montantRecommande = s.montant_recommande;
         
-        console.log('Statut contribution:', statutContribution, 'Montant:', montantRecommande);
+        console.log('Contribution status calculated');
       } else {
         // Par défaut, suggérer un mois
         montantRecommande = 1900;
@@ -204,7 +204,7 @@ serve(async (req) => {
         : `Contribution Annuelle - Statut: ${statutContribution}`,
     };
 
-    console.log('Réponse Wave:', response);
+    console.log('Wave verification completed successfully');
 
     return new Response(
       JSON.stringify(response),
