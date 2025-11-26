@@ -104,10 +104,10 @@ export const Etape5Documents = ({ formData, updateFormData }: Etape5Props) => {
                 <SelectValue placeholder="Sélectionner" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Certificat foncier">Certificat foncier</SelectItem>
-                <SelectItem value="Titre foncier">Titre foncier</SelectItem>
-                <SelectItem value="Contrat métayage">Contrat métayage</SelectItem>
-                <SelectItem value="Autorisation exploiter">Autorisation d'exploiter</SelectItem>
+                <SelectItem value="certificat_foncier">Certificat foncier</SelectItem>
+                <SelectItem value="titre_foncier">Titre foncier</SelectItem>
+                <SelectItem value="contrat_metayage">Contrat métayage</SelectItem>
+                <SelectItem value="autorisation">Autorisation d'exploiter</SelectItem>
               </SelectContent>
             </Select>
           </div>

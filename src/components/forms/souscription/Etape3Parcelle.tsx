@@ -321,11 +321,10 @@ export const Etape3Parcelle = ({ formData, updateFormData }: Etape3Props) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="photo_1">Vue générale *</Label>
+            <Label>Vue générale *</Label>
             <Input
-              id="photo_1"
               type="file"
-              accept="image/jpeg,image/png"
+              accept="image/*"
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) handleFileSelect('photo_1_file', file);
@@ -350,11 +349,10 @@ export const Etape3Parcelle = ({ formData, updateFormData }: Etape3Props) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="photo_2">Vue délimitée (limites visibles) *</Label>
+            <Label>Vue délimitée (limites visibles) *</Label>
             <Input
-              id="photo_2"
               type="file"
-              accept="image/jpeg,image/png"
+              accept="image/*"
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) handleFileSelect('photo_2_file', file);
@@ -379,11 +377,10 @@ export const Etape3Parcelle = ({ formData, updateFormData }: Etape3Props) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="photo_3">Vue alternative (autre angle) *</Label>
+            <Label>Vue alternative (autre angle) *</Label>
             <Input
-              id="photo_3"
               type="file"
-              accept="image/jpeg,image/png"
+              accept="image/*"
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) handleFileSelect('photo_3_file', file);
