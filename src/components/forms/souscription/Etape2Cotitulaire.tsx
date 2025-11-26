@@ -65,7 +65,7 @@ export const Etape2Cotitulaire = ({ formData, updateFormData }: Etape2Props) => 
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="M.">M.</SelectItem>
+                  <SelectItem value="M">M.</SelectItem>
                   <SelectItem value="Mme">Mme</SelectItem>
                   <SelectItem value="Mlle">Mlle</SelectItem>
                 </SelectContent>
@@ -144,9 +144,9 @@ export const Etape2Cotitulaire = ({ formData, updateFormData }: Etape2Props) => 
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="CNI">CNI</SelectItem>
-                  <SelectItem value="Passeport">Passeport</SelectItem>
-                  <SelectItem value="Attestation">Attestation</SelectItem>
+                  <SelectItem value="cni">CNI</SelectItem>
+                  <SelectItem value="passeport">Passeport</SelectItem>
+                  <SelectItem value="attestation">Attestation</SelectItem>
                 </SelectContent>
               </Select>
             </div>

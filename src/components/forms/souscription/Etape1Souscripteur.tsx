@@ -243,10 +243,10 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
                 <SelectValue placeholder="Sélectionner" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Célibataire">Célibataire</SelectItem>
-                <SelectItem value="Marié">Marié(e)</SelectItem>
-                <SelectItem value="Divorcé">Divorcé(e)</SelectItem>
-                <SelectItem value="Veuf">Veuf(ve)</SelectItem>
+                <SelectItem value="celibataire">Célibataire</SelectItem>
+                <SelectItem value="marie">Marié(e)</SelectItem>
+                <SelectItem value="divorce">Divorcé(e)</SelectItem>
+                <SelectItem value="veuf">Veuf(ve)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -269,9 +269,9 @@ export const Etape1Souscripteur = ({ formData, updateFormData }: Etape1Props) =>
                   <SelectValue placeholder="Sélectionner" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="CNI">CNI</SelectItem>
-                  <SelectItem value="Passeport">Passeport</SelectItem>
-                  <SelectItem value="Attestation">Attestation</SelectItem>
+                  <SelectItem value="cni">CNI</SelectItem>
+                  <SelectItem value="passeport">Passeport</SelectItem>
+                  <SelectItem value="attestation">Attestation</SelectItem>
                 </SelectContent>
               </Select>
             </div>
