@@ -15,4 +15,21 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Optimisation pour la production
+    outDir: "dist",
+    sourcemap: false,
+    minify: "terser",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          supabase: ["@supabase/supabase-js"],
+          ui: ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-tabs"],
+        },
+      },
+    },
+    // Augmenter la limite de taille pour éviter les warnings
+    chunkSizeWarningLimit: 1000,
+  },
 }));

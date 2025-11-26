@@ -328,10 +328,10 @@ const PlantationForm = ({ plantation, onSuccess, onCancel }: PlantationFormProps
               <SelectValue placeholder="Sélectionner" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Titre_Foncier">Titre Foncier</SelectItem>
-              <SelectItem value="Arrete">Arrêté d'Attribution</SelectItem>
-              <SelectItem value="Certificat">Certificat Foncier</SelectItem>
-              <SelectItem value="Attestation">Attestation Villageoise</SelectItem>
+              <SelectItem value="titre_foncier">Titre Foncier</SelectItem>
+              <SelectItem value="certificat_foncier">Certificat Foncier</SelectItem>
+              <SelectItem value="contrat_metayage">Contrat Métayage</SelectItem>
+              <SelectItem value="autorisation">Autorisation d'exploiter</SelectItem>
             </SelectContent>
           </Select>
         </div>

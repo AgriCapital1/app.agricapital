@@ -120,23 +120,23 @@ const NouvelleSouscription = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Non authentifié");
 
-      // Créer le souscripteur
+      // Créer le souscripteur (normalisation des enums en minuscules)
       const { data: souscripteur, error: errorSous } = await (supabase as any)
         .from("souscripteurs")
         .insert({
-          civilite: formData.civilite,
+          civilite: formData.civilite?.toLowerCase(),
           nom_complet: formData.nom_famille || "",
           prenoms: formData.prenoms || "",
           date_naissance: formData.date_naissance,
           lieu_naissance: formData.lieu_naissance || "",
-          type_piece: formData.type_piece,
+          type_piece: formData.type_piece?.toLowerCase(),
           numero_piece: formData.numero_piece,
           date_delivrance_piece: formData.date_delivrance_piece,
           fichier_piece_url: formData.fichier_piece_url || "",
           photo_profil_url: formData.photo_profil_url || "",
-          statut_marital: formData.statut_marital,
+          statut_marital: formData.statut_marital?.toLowerCase(),
           conjoint_nom_prenoms: formData.cotit_nom_famille && formData.cotit_prenoms ? `${formData.cotit_nom_famille} ${formData.cotit_prenoms}` : null,
-          conjoint_type_piece: formData.cotit_type_piece || null,
+          conjoint_type_piece: formData.cotit_type_piece?.toLowerCase() || null,
           conjoint_numero_piece: formData.cotit_numero_piece || null,
           conjoint_date_delivrance: formData.cotit_date_delivrance || null,
           conjoint_telephone: formData.cotit_telephone || null,
